@@ -1,2 +1,3 @@
 # RPG_Project
-> This is a fully functioned text_based RPG for personal practice 
+> This project is a multiple players and multiple enenies RPG.
+[x]
