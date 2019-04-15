@@ -32,15 +32,17 @@ player_items = [{"item": potion, "quantity": 15},
 				{"item": grenade, "quantity":5}]
 
 
-player1 = Person("Luis", 460, 65, 500, 34, player_magic, player_items)
-player2= Person("Joe", 400, 60, 520, 34, player_magic, player_items)
-player3 = Person("Ken", 420, 50, 510, 34, player_magic, player_items)
+player1 = Person("Luis", 1460, 65, 500, 34, player_magic, player_items)
+player2= Person("Joe", 1400, 60, 520, 34, player_magic, player_items)
+player3 = Person("Ken", 1420, 50, 510, 34, player_magic, player_items)
 players = [player1, player2, player3]
 
 # Instantiate Enemy
-enemy1 = Person('Imp',2000, 300, 50, 80, [],[])
-enemy2 = Person('Vincent',1000, 800, 90, 25, [],[])
-enemy3 = Person("Imp", 2000, 300, 50, 80,[],[])
+enemy_magic = [thunder, meteor, cure]
+
+enemy1 = Person('Cersei',5000, 300, 50, 80, enemy_magic,[])
+enemy2 = Person('Vincent',6000, 800, 90, 25, enemy_magic,[])
+enemy3 = Person("NightKing",10000, 400, 50, 80,enemy_magic,[])
 enemies = [enemy1, enemy2, enemy3]
 
 # Procedure
@@ -166,21 +168,6 @@ while running:
 					print(Color.FAIL+ Color.BOLD + enemies[enemy].name + " has been defeated" + Color.ENDC)
 					del enemies[enemy]
 
-	# ### Show Status
-	# print("*" * 22)
-	# print(Color.BOLD + "Enemy HP:", Color.FAIL + str(enemy.get_hp()) + "/" + str(enemy.max_hp) + Color.ENDC)
-	# print(Color.BOLD + "Your HP:", Color.OKGREEN + str(player.get_hp()) + "/" + str(player.max_hp) + Color.ENDC)
-	# print(Color.BOLD + "Your MP:", Color.OKBLUE + str(player.get_mp()) + "/" + str(player.max_mp) + Color.ENDC)
-	#
-
-	# Enemy Always Attack
-	Enemy_choice = 1
-	target = random.randrange(0,3)
-	enemy_dmg = enemies[enemy].generate_damage()
-	players[target].take_damage(enemy_dmg)
-	print(Color.FAIL + "Enemy attacks " + players[target].name, "for", str(enemy_dmg) +" points!" + Color.ENDC)
-
-
 	# End Game
 	defeated_enemies = 0
 	for enemy in enemies:
@@ -198,6 +185,49 @@ while running:
 	if defeated_players == 3:
 		print(Color.BOLD + Color.FAIL + "Your enemies have defeated you!" + Color.ENDC)
 		running = False
+
+
+
+	# Enemy Always Attack
+	for enemy in enemies:
+		Enemy_choice = random.randrange(0,2)
+
+		if Enemy_choice == 0:
+			target = random.randrange(0,3)
+			enemy_dmg = enemy.generate_damage()
+			players[target].take_damage(enemy_dmg)
+			print(Color.FAIL + enemy.name.replace(" ","") +" attacks " + players[target].name, "for", str(enemy_dmg) +" points!" + Color.ENDC)
+			if players[target].get_hp() == 0:
+				print(Color.FAIL + players[target].name + " has been defeated" + Color.ENDC)
+				del players[target]
+
+
+		elif Enemy_choice == 1:
+			spell, magic_dmg = enemy.choose_enemy_spell()
+			enemy.reduce_mp(spell.cost)
+
+
+			if spell.type == "white":
+				enemy.heal(magic_dmg)
+				print(Color.OKBLUE + '\n' + spell.name + " heals " + enemy.name + "for", magic_dmg, "HP." + Color.ENDC )
+				print(Color.OKBLUE + spell.name + " cost " + str(spell.cost) + " points of MP.",Color.ENDC)
+
+			elif spell.type == "black":
+				target = random.randrange(0, 3)
+				players[target].take_damage(magic_dmg)
+
+				print(Color.OKBLUE + "\n" + enemy.name , spell.name + " deals ",players[target].name, str(magic_dmg)+" points of damage."+ Color.ENDC)
+				print(Color.OKBLUE + spell.name + " cost " + str(spell.cost) + " points of MP.", Color.ENDC)
+
+				if players[target].get_hp() == 0:
+					print(Color.FAIL + players[target].name + " has been defeated" + Color.ENDC)
+					del players[target]
+
+
+
+
+
+
 
 
 
