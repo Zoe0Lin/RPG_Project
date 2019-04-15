@@ -1,3 +1,5 @@
 # RPG_Project
 > This project is a multiple players and multiple enenies RPG.
-[x]
+
+you can build you own role with different name, hp, mp, attack damage and magic spell.
+
